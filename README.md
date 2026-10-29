@@ -121,21 +121,27 @@ See [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec) for ou
 
 ## Getting started
 
-Use Transformers to load the model and its custom implementation from a prepared model directory. The example below runs text generation on a single GPU.
+Use Transformers to load the model and its custom implementation from a Hugging Face repository or a local model directory. The example below runs text generation on a single GPU.
 
 ### Requirements
 
 The checked inference environment uses **Transformers 5.18.0** and **PyTorch 2.11.0 with CUDA 13.0**. The model directory must include the configuration, tokenizer, chat template, model code, and accessible weight shards.
 
+First install a [PyTorch build](https://pytorch.org/get-started/locally/) compatible with your CUDA environment, then install the remaining dependencies:
+
+```bash
+python -m pip install "transformers==5.18.0" accelerate safetensors
+```
+
 ### Text generation with Transformers
 
-Set `model_id` to the prepared model directory, then run:
+Set `model_id` to the Hugging Face repository ID or a local model directory, then run:
 
 ```python
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_id = "/path/to/model-directory"
+model_id = "sensenova/SenseNova-6.8-Loop-9B-Preview"
 device = "cuda:0"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)

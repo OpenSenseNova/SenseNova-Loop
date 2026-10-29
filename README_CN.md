@@ -121,21 +121,27 @@ SenseNova-6.8-Loop-9B-Preview 已支持 **MTP** 推理加速。**Dspark** 和 **
 
 ## 快速开始
 
-使用 Transformers 从准备好的模型目录中加载模型及其自定义实现。下面的示例展示了如何在单张 GPU 上进行文本生成。
+使用 Transformers 从 Hugging Face 仓库或本地模型目录中加载模型及其自定义实现。下面的示例展示了如何在单张 GPU 上进行文本生成。
 
 ### 环境要求
 
 已核对的推理环境使用 **Transformers 5.18.0** 和 **PyTorch 2.11.0（CUDA 13.0）**。模型目录需要包含配置、分词器、对话模板、模型代码，以及可访问的权重分片。
 
+请先安装与 CUDA 环境兼容的 [PyTorch 版本](https://pytorch.org/get-started/locally/)，再安装其余依赖：
+
+```bash
+python -m pip install "transformers==5.18.0" accelerate safetensors
+```
+
 ### 使用 Transformers 生成文本
 
-将 `model_id` 设置为准备好的模型目录，然后运行：
+将 `model_id` 设置为 Hugging Face 仓库 ID 或本地模型目录，然后运行：
 
 ```python
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_id = "/path/to/model-directory"
+model_id = "sensenova/SenseNova-6.8-Loop-9B-Preview"
 device = "cuda:0"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
