@@ -180,4 +180,4 @@ print(response)
 
 ## 许可证与引用
 
-**许可证：**发布权重与代码所适用的许可证待确定。<br>**引用：**将在发布时补充。
+**许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**将在发布时补充。

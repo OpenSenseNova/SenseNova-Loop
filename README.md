@@ -180,4 +180,4 @@ The model is trained using [OpenSenseNova/torchtitan](https://github.com/OpenSen
 
 ## License and citation
 
-**License:** To be determined for the released weights and code.<br>**Citation:** To be added with the release.
+**License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:** To be added with the release.
