@@ -10,8 +10,8 @@ These are the examples selected for the model README. Each case has its own dire
 | PPT Design | [Iceland](iceland/) | [Available](iceland/README.md) | Final PPTX and README preview |
 | PPT Design | [Chocolate](chocolate/) | [Available](chocolate/README.md) | Final PPTX and README preview |
 | Data Analysis | [Moon Simulation](moon-simulation/) | [Available](moon-simulation/README.md) | GIF |
-| Data Analysis | [Energy Analysis](energy-analysis/) | [Available](energy-analysis/README.md) | Image |
+| Data Analysis | [Energy Analysis](energy-analysis/) | [Available](energy-analysis/README.md) | Image and [input dataset](energy-analysis/energy.json) |
 
 Prompts are preserved in their original Chinese. Reproduction notes describe the documented application workflow. Original agent trajectories are not included.
 
-The Moon Simulation and Energy Analysis prompts were supplied separately by the showcase author. Their READMEs distinguish reference reproduction guidance from verified execution details. Energy Analysis requires an original `energy.json` attachment that is not yet included; both examples currently provide previews rather than runnable webpage sources.
+The Moon Simulation and Energy Analysis prompts were supplied separately by the showcase author. Their READMEs distinguish reference reproduction guidance from verified execution details. Energy Analysis includes the original [energy.json](energy-analysis/energy.json) input dataset. Both examples include showcase previews; follow their reproduction instructions to generate the interactive webpages.
