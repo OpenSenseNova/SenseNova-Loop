@@ -69,11 +69,7 @@ Documented training recipes combine long sequences, multimodal inputs, and super
 
 ## Model architecture
 
-SenseNova-6.8-Loop-9B-Preview combines a 32-layer multimodal decoder with a repeated middle block. The figure illustrates the order of computation; the detailed operations inside each layer and the vision encoder are omitted.
-
-![Input passes through early layers, then layers 4 through 27 twice with shared weights and two mHC streams, followed by final layers and text output.](assets/loop9b-architecture.svg)
-
-*Figure 1. Decoder execution order. Layer indices are zero-based; the two passes share block weights.*
+SenseNova-6.8-Loop-9B-Preview builds on a 32-layer multimodal decoder that combines shared-weight looped computation, hybrid attention, and two-stream manifold-constrained hyper-connections (mHC). The following sections describe how these components extend the computation path and manage information flow through the model.
 
 ### Looped decoder
 
