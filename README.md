@@ -18,6 +18,8 @@
 
 [![Motion Design](examples/ink-journey/ink-journey-preview.gif)](examples/ink-journey/ink-journey-demo.mp4)
 
+![Odyssey: an animated homeward journey.](examples/odyssey/odyssey-preview.gif)
+
 #### PPT Design
 
 ![Teacher’s Day presentation: slides 1, 3, and 6.](examples/teacher-day/teacher-day-horizontal.jpg)

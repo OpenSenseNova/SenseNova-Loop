@@ -18,6 +18,8 @@
 
 [![动效设计](examples/ink-journey/ink-journey-preview.gif)](examples/ink-journey/ink-journey-demo.mp4)
 
+![奥德赛：归乡漫游动效。](examples/odyssey/odyssey-preview.gif)
+
 #### PPT 设计
 
 ![教师节主题演示文稿：第 1、3、6 页。](examples/teacher-day/teacher-day-horizontal.jpg)
