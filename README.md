@@ -67,8 +67,6 @@ Documented training recipes combine long sequences, multimodal inputs, and super
 | Training context | Up to 262,144 tokens |
 | Existing export precision | BF16 backbone; FP32 mHC routing parameters |
 
-Training sequence length is a configuration, not a guarantee of inference support or performance at every length.
-
 ## Model architecture
 
 SenseNova-6.8-Loop-9B-Preview combines a 32-layer multimodal decoder with a repeated middle block. The figure illustrates the order of computation; the detailed operations inside each layer and the vision encoder are omitted.
