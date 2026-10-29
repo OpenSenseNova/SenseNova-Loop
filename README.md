@@ -40,7 +40,7 @@
 
 The model combines a **looped decoder with two-stream manifold-constrained hyper-connections (mHC)**. A contiguous block of decoder layers is executed twice with shared weights, while learned mappings manage information flow between two residual streams in the looped section. Together, these components provide a deeper execution path without duplicating the repeated block's parameters.
 
-Documented training recipes combine long sequences, multimodal inputs, and supervised task trajectories, with a maximum training sequence length of 262,144 tokens. Model behavior and deployment limits depend on the released checkpoint and inference implementation.
+Documented training recipes combine long sequences, multimodal inputs, and supervised task trajectories, with a maximum training sequence length of 262,144 tokens. For the best model performance, we recommend using our documented deployment environment and configuration parameters.
 
 ### Model highlights
 
