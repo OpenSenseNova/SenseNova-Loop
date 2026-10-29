@@ -178,6 +178,32 @@ print(response)
 
 模型训练使用 [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan) 中的代码，训练示例请参见仓库中的 `example/train` 目录。
 
+## 部署
+
+### [LightLLM](https://github.com/ModelTC/LightLLM)
+
+以下为四卡 GPU 部署示例，请将本地模型路径替换为实际路径：
+
+```bash
+docker pull ghcr.io/modeltc/lightllm:main
+
+docker run --rm --gpus all --ipc=host -p 8000:8000 \
+  -v /path/to/SenseNova-6.8-Loop-9B-Preview:/model \
+  -e LOADWORKER=4 -e LIGHTLLM_TRITON_AUTOTUNE_LEVEL=1 \
+  ghcr.io/modeltc/lightllm:main \
+  python -m lightllm.server.api_server \
+    --model_dir /model --model_name sensenova_loop \
+    --tp 4 --host 0.0.0.0 --port 8000
+```
+
+请求示例：
+
+```bash
+curl http://localhost:8000/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
+```
+
 ## 许可证与引用
 
 **许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**将在发布时补充。

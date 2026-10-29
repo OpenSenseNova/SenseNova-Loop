@@ -178,6 +178,32 @@ The example uses greedy decoding and generates up to 256 new tokens. Set `enable
 
 The model is trained using [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan); see the `example/train` directory in the repository for training examples.
 
+## Deployment
+
+### [LightLLM](https://github.com/ModelTC/LightLLM)
+
+Four-GPU example; replace the local model path:
+
+```bash
+docker pull ghcr.io/modeltc/lightllm:main
+
+docker run --rm --gpus all --ipc=host -p 8000:8000 \
+  -v /path/to/SenseNova-6.8-Loop-9B-Preview:/model \
+  -e LOADWORKER=4 -e LIGHTLLM_TRITON_AUTOTUNE_LEVEL=1 \
+  ghcr.io/modeltc/lightllm:main \
+  python -m lightllm.server.api_server \
+    --model_dir /model --model_name sensenova_loop \
+    --tp 4 --host 0.0.0.0 --port 8000
+```
+
+Example request:
+
+```bash
+curl http://localhost:8000/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
+```
+
 ## License and citation
 
 **License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:** To be added with the release.
