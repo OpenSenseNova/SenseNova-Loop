@@ -16,9 +16,9 @@
 
 #### 动效设计
 
-[![动效设计](examples/ink-journey/ink-journey-preview.gif)](examples/ink-journey/ink-journey-demo.mp4)
+<a href="examples/ink-journey/ink-journey-demo.mp4"><img src="examples/ink-journey/ink-journey-preview.gif" alt="动效设计" width="100%"></a>
 
-![奥德赛：归乡漫游动效。](examples/odyssey/odyssey-preview.gif)
+<img src="examples/odyssey/odyssey-preview.gif" alt="奥德赛：归乡漫游动效。" width="100%">
 
 #### PPT 设计
 

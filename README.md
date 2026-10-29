@@ -16,9 +16,9 @@
 
 #### Motion Design
 
-[![Motion Design](examples/ink-journey/ink-journey-preview.gif)](examples/ink-journey/ink-journey-demo.mp4)
+<a href="examples/ink-journey/ink-journey-demo.mp4"><img src="examples/ink-journey/ink-journey-preview.gif" alt="Motion Design" width="100%"></a>
 
-![Odyssey: an animated homeward journey.](examples/odyssey/odyssey-preview.gif)
+<img src="examples/odyssey/odyssey-preview.gif" alt="Odyssey: an animated homeward journey." width="100%">
 
 #### PPT Design
 
