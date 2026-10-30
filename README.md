@@ -1,22 +1,22 @@
-# SenseNova-6.8-Loop-9B-Preview
+# SenseNova-Loop-9B-Preview
 
 <p align="center">
   <strong>English</strong> | <a href="./README_CN.md">简体中文</a>
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="SenseNova Loop 9B Preview on Hugging Face"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-SenseNova--Loop--9B--Preview-yellow" alt="SenseNova-Loop-9B-Preview on Hugging Face"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 License"></a>
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop architecture"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop architecture"></a>
 </p>
 
 ![Looped Transformer architecture with a shared looped block and mHC residual streams.](assets/loop-mhc-overview.jpg)
 
 ## 📣 News
 
-- `[2026.10.30]` We release **SenseNova-6.8-Loop-9B-Preview**, a looped multimodal model for long-context and agentic workflows.
+- `[2026.10.30]` We release **SenseNova-Loop-9B-Preview**, a looped multimodal model for long-context and agentic workflows.
 
-## 🚀 SenseNova-6.8-Loop-9B-Preview
+## 🚀 SenseNova-Loop-9B-Preview
 
 ### 🎬 Showcase (Created by Raccoon Work)
 
@@ -42,7 +42,7 @@
 
 ## Overview
 
-**SenseNova-6.8-Loop-9B-Preview** is a multimodal language model developed for long-context and agentic workflows. It accepts text and images and generates text for applications that combine document understanding, coding, and interaction with external tools.
+**SenseNova-Loop-9B-Preview** is a multimodal language model developed for long-context and agentic workflows. It accepts text and images and generates text for applications that combine document understanding, coding, and interaction with external tools.
 
 The model combines a **looped decoder with two-stream manifold-constrained hyper-connections (mHC)**. A contiguous block of decoder layers is executed twice with shared weights, while learned mappings manage information flow between two residual streams in the looped section. Together, these components provide a deeper execution path without duplicating the repeated block's parameters.
 
@@ -57,11 +57,11 @@ Documented training recipes combine long sequences, multimodal inputs, and super
 
 ## 📊 Key Benchmarks
 
-![SenseNova 6.8 Loop-9B-Preview benchmark results compared with other models on BIRD-Dev, WorkBuddy Bench, AIDABench, TeamBench, Terminal Bench 2.1, T³-Banking, AutomationBench, and RaccoonPPTBench.](assets/loop9b-benchmark-results.png)
+![SenseNova-Loop-9B-Preview benchmark results compared with other models on BIRD-Dev, WorkBuddy Bench, AIDABench, TeamBench, Terminal Bench 2.1, T³-Banking, AutomationBench, and RaccoonPPTBench.](assets/loop9b-benchmark-results.png)
 
 ## Model specifications
 
-| Property | SenseNova-6.8-Loop-9B-Preview |
+| Property | SenseNova-Loop-9B-Preview |
 | --- | --- |
 | Architecture | Autoregressive multimodal decoder; looped block with two-stream mHC |
 | Backbone scale | ~9B total parameters; ~14.6B inference parameters |
@@ -75,7 +75,7 @@ Documented training recipes combine long sequences, multimodal inputs, and super
 
 ## Model architecture
 
-SenseNova-6.8-Loop-9B-Preview builds on a 32-layer multimodal decoder that combines shared-weight looped computation, hybrid attention, and two-stream manifold-constrained hyper-connections (mHC). The following sections describe how these components extend the computation path and manage information flow through the model.
+SenseNova-Loop-9B-Preview builds on a 32-layer multimodal decoder that combines shared-weight looped computation, hybrid attention, and two-stream manifold-constrained hyper-connections (mHC). The following sections describe how these components extend the computation path and manage information flow through the model.
 
 ### Looped decoder
 
@@ -105,7 +105,7 @@ The loop range, pass count, and mHC routing parameters form part of the checkpoi
 
 ## Inference acceleration
 
-SenseNova-6.8-Loop-9B-Preview supports **MTP** for accelerated inference. **Dspark** and **Dflash2** are under development, with training currently in progress.
+SenseNova-Loop-9B-Preview supports **MTP** for accelerated inference. **Dspark** and **Dflash2** are under development, with training currently in progress.
 
 | Method | Status |
 | --- | --- |
@@ -137,7 +137,7 @@ Set `model_id` to the Hugging Face repository ID or a local model directory, the
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_id = "sensenova/SenseNova-6.8-Loop-9B-Preview"
+model_id = "sensenova/SenseNova-Loop-9B-Preview"
 device = "cuda:0"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
@@ -180,20 +180,20 @@ The example uses greedy decoding and generates up to 256 new tokens. Set `enable
 
 ### Model training
 
-To fine-tune **SenseNova-6.8-Loop-9B-Preview** with mHC on a single node with 8 GPUs, run the following commands in your configured training environment:
+To fine-tune **SenseNova-Loop-9B-Preview** with mHC on a single node with 8 GPUs, run the following commands in your configured training environment:
 
 ```bash
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
-MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
-  bash examples/train/SenseNova-6.8-Loop-9B-Preview/mhc2_loop2_titan.sh
+MODEL_PATH=sensenova/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+  bash examples/train/SenseNova-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
 Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35) for configuration options, DPO, and MTP training.
 
 ### DSpark training
 
-To train a DSpark draft model for **SenseNova-6.8-Loop-9B-Preview** on a single node with 8 GPUs, run the following commands in your configured training environment:
+To train a DSpark draft model for **SenseNova-Loop-9B-Preview** on a single node with 8 GPUs, run the following commands in your configured training environment:
 
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
@@ -211,11 +211,11 @@ Four-GPU example; replace the local model path:
 docker pull ghcr.io/modeltc/lightllm:main
 
 docker run --rm --gpus all --ipc=host -p 8000:8000 \
-  -v /path/to/SenseNova-6.8-Loop-9B-Preview:/model \
+  -v /path/to/SenseNova-Loop-9B-Preview:/model \
   -e LOADWORKER=4 -e LIGHTLLM_TRITON_AUTOTUNE_LEVEL=1 \
   ghcr.io/modeltc/lightllm:main \
   python -m lightllm.server.api_server \
-    --model_dir /model --model_name sensenova_loop \
+    --model_dir /model --model_name SenseNova-Loop-9B-Preview \
     --tp 4 --host 0.0.0.0 --port 8000
 ```
 
@@ -224,7 +224,7 @@ Example request:
 ```bash
 curl http://localhost:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
+  -d '{"model": "SenseNova-Loop-9B-Preview", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
 ### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
@@ -238,19 +238,19 @@ git fetch origin pull/47281/head
 git checkout -b sensenova-loop FETCH_HEAD
 python -m pip install -e ./python
 
-sglang serve --model-path /path/to/canonical-checkpoint
+sglang serve --model-path /path/to/SenseNova-Loop-9B-Preview
 ```
 
 ## License and citation
 
-**License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:**
+**License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:**
 
 ```bibtex
 @misc{sensenova2026loop,
-  title        = {{SenseNova-6.8-Loop-9B-Preview}},
+  title        = {{SenseNova-Loop-9B-Preview}},
   author       = {{SenseNova}},
   year         = {2026},
   howpublished = {Hugging Face model repository},
-  url          = {https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview}
+  url          = {https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview}
 }
 ```

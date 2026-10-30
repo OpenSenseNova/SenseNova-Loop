@@ -1,22 +1,22 @@
-# SenseNova-6.8-Loop-9B-Preview
+# SenseNova-Loop-9B-Preview
 
 <p align="center">
   <a href="./README.md">English</a> | <strong>简体中文</strong>
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="Hugging Face 上的 SenseNova Loop 9B Preview 模型"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-SenseNova--Loop--9B--Preview-yellow" alt="Hugging Face 上的 SenseNova-Loop-9B-Preview 模型"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 许可证"></a>
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop 架构"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop 架构"></a>
 </p>
 
 ![采用共享循环模块与 mHC 残差流的循环 Transformer 架构。](assets/loop-mhc-overview.jpg)
 
 ## 📣 最新动态
 
-- `[2026.10.30]` 我们发布了 **SenseNova-6.8-Loop-9B-Preview**，一个面向长上下文与智能体工作流的循环多模态模型。
+- `[2026.10.30]` 我们发布了 **SenseNova-Loop-9B-Preview**，一个面向长上下文与智能体工作流的循环多模态模型。
 
-## 🚀 SenseNova-6.8-Loop-9B-Preview
+## 🚀 SenseNova-Loop-9B-Preview
 
 ### 🎬 效果展示（由商汤小浣熊创作）
 
@@ -42,7 +42,7 @@
 
 ## 模型概述
 
-**SenseNova-6.8-Loop-9B-Preview** 是一个面向长上下文和智能体工作流的多模态语言模型。模型接收文本和图像输入，生成文本输出，适用于结合文档理解、编程及外部工具交互的应用。
+**SenseNova-Loop-9B-Preview** 是一个面向长上下文和智能体工作流的多模态语言模型。模型接收文本和图像输入，生成文本输出，适用于结合文档理解、编程及外部工具交互的应用。
 
 模型将**循环解码器与双流流形约束超连接（mHC）**相结合。一段连续的解码器层共享权重，依次执行两遍；循环模块中的可学习映射负责管理两条残差流之间的信息流动。通过这种设计，模型无需复制循环模块的参数，就能增加实际执行深度。
 
@@ -57,11 +57,11 @@
 
 ## 📊 核心评测
 
-![SenseNova 6.8 Loop-9B-Preview 与其他模型在 BIRD-Dev、WorkBuddy Bench、AIDABench、TeamBench、Terminal Bench 2.1、T³-Banking、AutomationBench 和 RaccoonPPTBench 上的评测结果对比。](assets/loop9b-benchmark-results.png)
+![SenseNova-Loop-9B-Preview 与其他模型在 BIRD-Dev、WorkBuddy Bench、AIDABench、TeamBench、Terminal Bench 2.1、T³-Banking、AutomationBench 和 RaccoonPPTBench 上的评测结果对比。](assets/loop9b-benchmark-results.png)
 
 ## 模型规格
 
-| 项目 | SenseNova-6.8-Loop-9B-Preview |
+| 项目 | SenseNova-Loop-9B-Preview |
 | --- | --- |
 | 架构 | 自回归多模态解码器；循环模块采用双流 mHC |
 | 参数规模 | 总共约 9B 参数，推理实际约 14.6B 参数 |
@@ -75,7 +75,7 @@
 
 ## 模型架构
 
-SenseNova-6.8-Loop-9B-Preview 以 32 层多模态解码器为基础，结合共享权重的循环计算、混合注意力与双流流形约束超连接（mHC）。下文将分别介绍这些组件如何拓展模型的计算路径，并组织模型内部的信息流动。
+SenseNova-Loop-9B-Preview 以 32 层多模态解码器为基础，结合共享权重的循环计算、混合注意力与双流流形约束超连接（mHC）。下文将分别介绍这些组件如何拓展模型的计算路径，并组织模型内部的信息流动。
 
 ### 循环解码器
 
@@ -105,7 +105,7 @@ SenseNova-6.8-Loop-9B-Preview 以 32 层多模态解码器为基础，结合共�
 
 ## 推理加速
 
-SenseNova-6.8-Loop-9B-Preview 已支持 **MTP** 推理加速。**Dspark** 和 **Dflash2** 正在开发中，目前处于训练阶段。
+SenseNova-Loop-9B-Preview 已支持 **MTP** 推理加速。**Dspark** 和 **Dflash2** 正在开发中，目前处于训练阶段。
 
 | 方法 | 状态 |
 | --- | --- |
@@ -137,7 +137,7 @@ python -m pip install "transformers==5.18.0" accelerate safetensors
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_id = "sensenova/SenseNova-6.8-Loop-9B-Preview"
+model_id = "sensenova/SenseNova-Loop-9B-Preview"
 device = "cuda:0"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
@@ -180,20 +180,20 @@ print(response)
 
 ### 主模型训练
 
-在配置好的训练环境中，可使用以下命令在单机 8 卡上对 **SenseNova-6.8-Loop-9B-Preview** 进行采用 mHC 的微调：
+在配置好的训练环境中，可使用以下命令在单机 8 卡上对 **SenseNova-Loop-9B-Preview** 进行采用 mHC 的微调：
 
 ```bash
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
-MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
-  bash examples/train/SenseNova-6.8-Loop-9B-Preview/mhc2_loop2_titan.sh
+MODEL_PATH=sensenova/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+  bash examples/train/SenseNova-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
 请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35)。
 
 ### DSpark 训练
 
-在配置好的训练环境中，可使用以下命令在单机 8 卡上为 **SenseNova-6.8-Loop-9B-Preview** 训练 DSpark draft model：
+在配置好的训练环境中，可使用以下命令在单机 8 卡上为 **SenseNova-Loop-9B-Preview** 训练 DSpark draft model：
 
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
@@ -211,11 +211,11 @@ bash examples/sensenova-loop-dspark/run.sh
 docker pull ghcr.io/modeltc/lightllm:main
 
 docker run --rm --gpus all --ipc=host -p 8000:8000 \
-  -v /path/to/SenseNova-6.8-Loop-9B-Preview:/model \
+  -v /path/to/SenseNova-Loop-9B-Preview:/model \
   -e LOADWORKER=4 -e LIGHTLLM_TRITON_AUTOTUNE_LEVEL=1 \
   ghcr.io/modeltc/lightllm:main \
   python -m lightllm.server.api_server \
-    --model_dir /model --model_name sensenova_loop \
+    --model_dir /model --model_name SenseNova-Loop-9B-Preview \
     --tp 4 --host 0.0.0.0 --port 8000
 ```
 
@@ -224,7 +224,7 @@ docker run --rm --gpus all --ipc=host -p 8000:8000 \
 ```bash
 curl http://localhost:8000/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
+  -d '{"model": "SenseNova-Loop-9B-Preview", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
 ### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
@@ -238,19 +238,19 @@ git fetch origin pull/47281/head
 git checkout -b sensenova-loop FETCH_HEAD
 python -m pip install -e ./python
 
-sglang serve --model-path /path/to/canonical-checkpoint
+sglang serve --model-path /path/to/SenseNova-Loop-9B-Preview
 ```
 
 ## 许可证与引用
 
-**许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**
+**许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**
 
 ```bibtex
 @misc{sensenova2026loop,
-  title        = {{SenseNova-6.8-Loop-9B-Preview}},
+  title        = {{SenseNova-Loop-9B-Preview}},
   author       = {{SenseNova}},
   year         = {2026},
   howpublished = {Hugging Face model repository},
-  url          = {https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview}
+  url          = {https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview}
 }
 ```
