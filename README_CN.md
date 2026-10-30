@@ -5,9 +5,9 @@
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/Model%20Card-Hugging%20Face-2459B8" alt="Hugging Face 模型卡片"></a>
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/tree/main"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Weights-yellow" alt="Hugging Face 模型权重"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="Hugging Face 上的 SenseNova Loop 9B Preview 模型"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 许可证"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova_loop-2459B8" alt="sensenova_loop 架构"></a>
 </p>
 
 ![采用共享循环模块与 mHC 残差流的循环 Transformer 架构。](assets/loop-mhc-overview.jpg)
