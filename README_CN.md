@@ -179,8 +179,28 @@ print(response)
 
 ## 训练
 
-- **主模型训练：**[OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan)，训练示例请参见仓库中的 `example/train` 目录。
-- **投机解码 draft model 训练：**[OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec)。
+### 主模型训练
+
+在配置好的训练环境中，可使用以下命令在单机 8 卡上对 **SenseNova-6.8-Loop-9B-Preview** 进行采用 mHC 的微调：
+
+```bash
+git clone https://github.com/OpenSenseNova/torchtitan.git
+cd torchtitan
+MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+  bash examples/train/loop_qwen35/mhc2_loop2_titan.sh
+```
+
+请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35)。
+
+### DSpark 训练
+
+在配置好的训练环境中，可使用以下命令在单机 8 卡上为 **SenseNova-6.8-Loop-9B-Preview** 训练 DSpark draft model：
+
+```bash
+git clone https://github.com/OpenSenseNova/SenseSpec.git
+cd SenseSpec
+bash examples/sensenova-loop-dspark/run.sh
+```
 
 ## 部署
 

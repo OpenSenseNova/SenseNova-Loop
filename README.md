@@ -179,8 +179,28 @@ The example uses greedy decoding and generates up to 256 new tokens. Set `enable
 
 ## Training
 
-- **Model training:** [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan); see the `example/train` directory in the repository for training examples.
-- **Draft model training for speculative decoding:** [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec).
+### Model training
+
+To fine-tune **SenseNova-6.8-Loop-9B-Preview** with mHC on a single node with 8 GPUs, run the following commands in your configured training environment:
+
+```bash
+git clone https://github.com/OpenSenseNova/torchtitan.git
+cd torchtitan
+MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+  bash examples/train/loop_qwen35/mhc2_loop2_titan.sh
+```
+
+Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35) for configuration options, DPO, and MTP training.
+
+### DSpark training
+
+To train a DSpark draft model for **SenseNova-6.8-Loop-9B-Preview** on a single node with 8 GPUs, run the following commands in your configured training environment:
+
+```bash
+git clone https://github.com/OpenSenseNova/SenseSpec.git
+cd SenseSpec
+bash examples/sensenova-loop-dspark/run.sh
+```
 
 ## Deployment
 
