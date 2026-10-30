@@ -210,6 +210,14 @@ curl http://localhost:8000/v1/chat/completions \
   -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
+### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
+
+Use a build containing the SenseNova Loop implementation in this PR, and replace the path below with your local canonical checkpoint directory:
+
+```bash
+sglang serve --model-path /path/to/canonical-checkpoint
+```
+
 ## License and citation
 
 **License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:** To be added with the release.
