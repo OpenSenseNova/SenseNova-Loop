@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="SenseNova Loop 9B Preview on Hugging Face"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 License"></a>
-  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova_loop-2459B8" alt="sensenova_loop architecture"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop architecture"></a>
 </p>
 
 ![Looped Transformer architecture with a shared looped block and mHC residual streams.](assets/loop-mhc-overview.jpg)
