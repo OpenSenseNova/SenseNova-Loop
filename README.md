@@ -185,14 +185,14 @@ The example uses greedy decoding and generates up to 256 new tokens. Set `enable
 
 `trust_remote_code=True` loads the custom model implementation from the model directory. Review model code before loading it from an untrusted source. The example follows the previously validated single-GPU inference script; image input and tool calling are not covered by this example.
 
-### Training
+## Training
 
 - **Model training:** [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan); see the `example/train` directory in the repository for training examples.
 - **Draft model training for speculative decoding:** [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec).
 
-### Deployment
+## Deployment
 
-#### [LightLLM](https://github.com/ModelTC/LightLLM)
+### [LightLLM](https://github.com/ModelTC/LightLLM)
 
 Four-GPU example; replace the local model path:
 
@@ -216,7 +216,7 @@ curl http://localhost:8000/v1/chat/completions \
   -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
-#### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
+### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
 
 Use a build containing the SenseNova Loop implementation in this PR, and replace the path below with your local canonical checkpoint directory:
 

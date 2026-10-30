@@ -185,14 +185,14 @@ print(response)
 
 `trust_remote_code=True` 会从模型目录加载自定义模型实现。加载不可信来源的模型前，请先检查模型代码。此示例沿用此前已验证的单卡推理脚本，不包含图像输入和工具调用。
 
-### 训练
+## 训练
 
 - **主模型训练：**[OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan)，训练示例请参见仓库中的 `example/train` 目录。
 - **投机解码 draft model 训练：**[OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec)。
 
-### 部署
+## 部署
 
-#### [LightLLM](https://github.com/ModelTC/LightLLM)
+### [LightLLM](https://github.com/ModelTC/LightLLM)
 
 以下为四卡 GPU 部署示例，请将本地模型路径替换为实际路径：
 
@@ -216,7 +216,7 @@ curl http://localhost:8000/v1/chat/completions \
   -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
-#### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
+### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
 
 请使用包含该 PR 中 SenseNova Loop 实现的版本，并将下方路径替换为本地 canonical checkpoint 目录：
 
