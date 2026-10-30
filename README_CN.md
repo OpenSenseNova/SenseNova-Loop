@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="#模型与资源"><img src="https://img.shields.io/badge/Tech%20Report-TBD-lightgrey" alt="技术报告：TBD"></a>
+  <img src="https://img.shields.io/badge/Tech%20Report-TBD-lightgrey" alt="技术报告：TBD">
   <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="Hugging Face 上的 SenseNova Loop 9B Preview 模型"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 许可证"></a>
   <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop 架构"></a>
@@ -115,14 +115,6 @@ SenseNova-6.8-Loop-9B-Preview 已支持 **MTP** 推理加速。**Dspark** 和 **
 | Dflash2 | 训练中 |
 
 实际加速效果取决于任务负载、硬件和服务配置。
-
-## 模型与资源
-
-| 资源 | 状态 |
-| --- | --- |
-| 模型权重 | [Hugging Face 模型页面](https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview) |
-| Transformers 推理实现 | 发布详情待公布 |
-| 技术报告 | TBD |
 
 ## 快速开始
 
