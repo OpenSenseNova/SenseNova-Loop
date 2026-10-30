@@ -81,7 +81,7 @@ SenseNova-6.8-Loop-9B-Preview builds on a 32-layer multimodal decoder that combi
 
 The decoder first processes the input through layers 0–3. The same block of layers 4–27 is then applied twice in sequence, after which layers 28–31 and the output head produce the model's output. If *B* represents the repeated block and *h* its input, the looped computation can be written as **B(B(h))**.
 
-The second pass takes the first pass's output as its input. Because both passes use the same layer weights, the model has **32 distinct decoder layers but 56 decoder-layer executions** per forward pass. Parameter sharing avoids duplicating the repeated block, while the additional pass still adds computation.
+During inference, the model performs **56 decoder-layer computations per forward pass while storing only 32 sets of decoder-layer weights**. The looped block reuses the same weights across both passes, with the second pass taking the first pass's output as input.
 
 ### Hybrid attention
 
@@ -174,7 +174,7 @@ print(response)
 
 The example uses greedy decoding and generates up to 256 new tokens. Set `enable_thinking=True` to enable thinking mode, or change `device` to select another GPU.
 
-`trust_remote_code=True` loads the custom model implementation from the model directory. Review model code before loading it from an untrusted source. The example follows the previously validated single-GPU inference script; image input and tool calling are not covered by this example.
+`trust_remote_code=True` loads the custom SenseNova Loop model implementation.
 
 ## Training
 
