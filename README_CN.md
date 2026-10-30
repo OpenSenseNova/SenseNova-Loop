@@ -185,11 +185,11 @@ print(response)
 ```bash
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
-MODEL_PATH=sensenova/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+MODEL_PATH=/path/to/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
   bash examples/train/SenseNova-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
-请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35)。
+请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/SenseNova-Loop-9B-Preview)。
 
 ### DSpark 训练
 
@@ -198,7 +198,15 @@ MODEL_PATH=sensenova/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
 cd SenseSpec
-bash examples/sensenova-loop-dspark/run.sh
+bash examples/SenseNova-Loop-9B-Preview-dspark/run.sh
+```
+
+### DFlash2 训练
+
+```bash
+git clone https://github.com/OpenSenseNova/SenseSpec.git
+cd SenseSpec
+bash examples/SenseNova-Loop-9B-Preview-dflash2/run.sh
 ```
 
 ## 部署

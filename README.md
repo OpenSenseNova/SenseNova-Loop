@@ -185,11 +185,11 @@ To fine-tune **SenseNova-Loop-9B-Preview** with mHC on a single node with 8 GPUs
 ```bash
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
-MODEL_PATH=sensenova/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
+MODEL_PATH=/path/to/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
   bash examples/train/SenseNova-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
-Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35) for configuration options, DPO, and MTP training.
+Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/SenseNova-Loop-9B-Preview) for configuration options, DPO, and MTP training.
 
 ### DSpark training
 
@@ -198,7 +198,15 @@ To train a DSpark draft model for **SenseNova-Loop-9B-Preview** on a single node
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
 cd SenseSpec
-bash examples/sensenova-loop-dspark/run.sh
+bash examples/SenseNova-Loop-9B-Preview-dspark/run.sh
+```
+
+### DFlash2 training
+
+```bash
+git clone https://github.com/OpenSenseNova/SenseSpec.git
+cd SenseSpec
+bash examples/SenseNova-Loop-9B-Preview-dflash2/run.sh
 ```
 
 ## Deployment
