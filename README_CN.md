@@ -187,7 +187,7 @@ print(response)
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
 MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
-  bash examples/train/loop_qwen35/mhc2_loop2_titan.sh
+  bash examples/train/SenseNova-6.8-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
 请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35)。

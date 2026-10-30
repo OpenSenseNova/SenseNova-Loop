@@ -187,7 +187,7 @@ To fine-tune **SenseNova-6.8-Loop-9B-Preview** with mHC on a single node with 8 
 git clone https://github.com/OpenSenseNova/torchtitan.git
 cd torchtitan
 MODEL_PATH=SenseNova/SenseNova-6.8-Loop-9B-Preview DATASET=/path/to/train.jsonl \
-  bash examples/train/loop_qwen35/mhc2_loop2_titan.sh
+  bash examples/train/SenseNova-6.8-Loop-9B-Preview/mhc2_loop2_titan.sh
 ```
 
 Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/loop_qwen35) for configuration options, DPO, and MTP training.
