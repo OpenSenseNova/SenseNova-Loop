@@ -190,9 +190,9 @@ print(response)
 - **主模型训练：**[OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan)，训练示例请参见仓库中的 `example/train` 目录。
 - **投机解码 draft model 训练：**[OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec)。
 
-## 部署
+### 部署
 
-### [LightLLM](https://github.com/ModelTC/LightLLM)
+#### [LightLLM](https://github.com/ModelTC/LightLLM)
 
 以下为四卡 GPU 部署示例，请将本地模型路径替换为实际路径：
 
@@ -216,7 +216,7 @@ curl http://localhost:8000/v1/chat/completions \
   -d '{"model": "sensenova_loop", "messages": [{"role": "user", "content": "Hello!"}], "max_tokens": 128}'
 ```
 
-### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
+#### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
 
 请使用包含该 PR 中 SenseNova Loop 实现的版本，并将下方路径替换为本地 canonical checkpoint 目录：
 
