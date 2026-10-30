@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="#models-and-resources"><img src="https://img.shields.io/badge/Tech%20Report-TBD-lightgrey" alt="Technical report: TBD"></a>
   <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Loop%209B%20Preview-yellow" alt="SenseNova Loop 9B Preview on Hugging Face"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 License"></a>
   <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop architecture"></a>
@@ -115,15 +116,13 @@ SenseNova-6.8-Loop-9B-Preview supports **MTP** for accelerated inference. **Dspa
 
 Practical speedups depend on the workload, hardware, and serving configuration.
 
-See [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec) for our speculative decoding training code.
-
 ## Models and resources
 
 | Resource | Status |
 | --- | --- |
 | Model weights | [Hugging Face model page](https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview) |
 | Transformers inference implementation | Publication details to be announced |
-| Technical report | To be announced |
+| Technical report | TBD |
 
 ## Getting started
 
@@ -188,7 +187,8 @@ The example uses greedy decoding and generates up to 256 new tokens. Set `enable
 
 ### Training
 
-The model is trained using [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan); see the `example/train` directory in the repository for training examples.
+- **Model training:** [OpenSenseNova/torchtitan](https://github.com/OpenSenseNova/torchtitan); see the `example/train` directory in the repository for training examples.
+- **Draft model training for speculative decoding:** [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec).
 
 ## Deployment
 
