@@ -4,6 +4,12 @@
   <a href="./README.md">English</a> | <strong>简体中文</strong>
 </p>
 
+<p align="center">
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/Model%20Card-Hugging%20Face-2459B8" alt="Hugging Face 模型卡片"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/tree/main"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Weights-yellow" alt="Hugging Face 模型权重"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 许可证"></a>
+</p>
+
 ![采用共享循环模块与 mHC 残差流的循环 Transformer 架构。](assets/loop-mhc-overview.jpg)
 
 ## 📣 最新动态
@@ -220,4 +226,14 @@ sglang serve --model-path /path/to/canonical-checkpoint
 
 ## 许可证与引用
 
-**许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**将在发布时补充。
+**许可证：**[Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE)。<br>**引用：**
+
+```bibtex
+@misc{sensenova2026loop,
+  title        = {{SenseNova-6.8-Loop-9B-Preview}},
+  author       = {{SenseNova}},
+  year         = {2026},
+  howpublished = {Hugging Face model repository},
+  url          = {https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview}
+}
+```

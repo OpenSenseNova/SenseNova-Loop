@@ -4,6 +4,12 @@
   <strong>English</strong> | <a href="./README_CN.md">简体中文</a>
 </p>
 
+<p align="center">
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview"><img src="https://img.shields.io/badge/Model%20Card-Hugging%20Face-2459B8" alt="Model Card on Hugging Face"></a>
+  <a href="https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview/tree/main"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Weights-yellow" alt="Model weights on Hugging Face"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 License"></a>
+</p>
+
 ![Looped Transformer architecture with a shared looped block and mHC residual streams.](assets/loop-mhc-overview.jpg)
 
 ## 📣 News
@@ -220,4 +226,14 @@ sglang serve --model-path /path/to/canonical-checkpoint
 
 ## License and citation
 
-**License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:** To be added with the release.
+**License:** [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-6.8-Loop-9B-Preview/blob/main/LICENSE).<br>**Citation:**
+
+```bibtex
+@misc{sensenova2026loop,
+  title        = {{SenseNova-6.8-Loop-9B-Preview}},
+  author       = {{SenseNova}},
+  year         = {2026},
+  howpublished = {Hugging Face model repository},
+  url          = {https://huggingface.co/sensenova/SenseNova-6.8-Loop-9B-Preview}
+}
+```
