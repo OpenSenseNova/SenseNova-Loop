@@ -233,6 +233,12 @@ curl http://localhost:8000/v1/chat/completions \
 Use a build containing the SenseNova Loop implementation in this PR, and replace the path below with your local canonical checkpoint directory:
 
 ```bash
+git clone https://github.com/sgl-project/sglang.git
+cd sglang
+git fetch origin pull/47281/head
+git checkout -b sensenova-loop FETCH_HEAD
+python -m pip install -e ./python
+
 sglang serve --model-path /path/to/canonical-checkpoint
 ```
 

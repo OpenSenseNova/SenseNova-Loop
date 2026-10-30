@@ -233,6 +233,12 @@ curl http://localhost:8000/v1/chat/completions \
 请使用包含该 PR 中 SenseNova Loop 实现的版本，并将下方路径替换为本地 canonical checkpoint 目录：
 
 ```bash
+git clone https://github.com/sgl-project/sglang.git
+cd sglang
+git fetch origin pull/47281/head
+git checkout -b sensenova-loop FETCH_HEAD
+python -m pip install -e ./python
+
 sglang serve --model-path /path/to/canonical-checkpoint
 ```
 
