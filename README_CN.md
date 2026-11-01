@@ -237,7 +237,7 @@ curl http://localhost:8000/v1/chat/completions \
 
 ### [SGLang](https://github.com/sgl-project/sglang/pull/47281)
 
-请使用包含该 PR 中 SenseNova Loop 实现的版本，并将下方路径替换为本地 canonical checkpoint 目录：
+请使用包含 SenseNova Loop 实现的 [SGLang PR #47281](https://github.com/sgl-project/sglang/pull/47281) 对应版本，并将下方模型路径替换为本地 checkpoint 目录：
 
 ```bash
 git clone https://github.com/sgl-project/sglang.git
@@ -247,6 +247,23 @@ git checkout -b sensenova-loop FETCH_HEAD
 python -m pip install -e ./python
 
 sglang serve --model-path /path/to/SenseNova-Loop-9B-Preview
+```
+
+### [vLLM](https://github.com/vllm-project/vllm/pull/64832)
+
+请使用包含 SenseNova Loop 实现的 [vLLM PR #64832](https://github.com/vllm-project/vllm/pull/64832) 对应版本进行推理：
+
+```bash
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+git fetch origin pull/64832/head
+git checkout -b sensenova-loop FETCH_HEAD
+python -m pip install -e .
+
+vllm serve sensenova/SenseNova-Loop-9B-Preview \
+  --served-model-name sensenova_loop \
+  --tensor-parallel-size 4 \
+  --dtype bfloat16
 ```
 
 ## 许可证与引用
