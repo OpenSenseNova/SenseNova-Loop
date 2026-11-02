@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-SenseNova--Loop--9B--Preview-yellow" alt="Hugging Face 上的 SenseNova-Loop-9B-Preview 模型"></a>
+  <a href="https://modelscope.cn/models/SenseNova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/ModelScope-SenseNova--Loop--9B--Preview-624AFF?logo=modelscope&amp;logoColor=white" alt="魔搭上的 SenseNova-Loop-9B-Preview 模型"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 许可证"></a>
   <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview/blob/main/config.json"><img src="https://img.shields.io/badge/Architecture-sensenova__loop-2459B8" alt="sensenova_loop 架构"></a>
 </p>
