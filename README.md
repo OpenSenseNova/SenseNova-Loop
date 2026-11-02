@@ -192,21 +192,30 @@ MODEL_PATH=/path/to/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
 
 Replace `/path/to/train.jsonl` with your SFT dataset. See the [training guide](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/SenseNova-Loop-9B-Preview) for configuration options, DPO, and MTP training.
 
-### DSpark training
+### Speculative Decoding Training
 
-To train a DSpark draft model for **SenseNova-Loop-9B-Preview** on a single node with 8 GPUs, run the following commands in your configured training environment:
+To train a DSpark or DFlash2 draft model for **SenseNova-Loop-9B-Preview** on a single node with 8 GPUs, use the training scripts provided in the [SenseSpec repository](https://github.com/OpenSenseNova/SenseSpec).
+
+First, clone the repository and navigate to the project directory:
 
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
 cd SenseSpec
+```
+
+#### DSpark Training
+
+Run the following command to train the DSpark draft model:
+
+```bash
 bash examples/SenseNova-Loop-9B-Preview-dspark/run.sh
 ```
 
-### DFlash2 training
+#### DFlash2 Training
+
+Run the following command to train the DFlash2 draft model:
 
 ```bash
-git clone https://github.com/OpenSenseNova/SenseSpec.git
-cd SenseSpec
 bash examples/SenseNova-Loop-9B-Preview-dflash2/run.sh
 ```
 

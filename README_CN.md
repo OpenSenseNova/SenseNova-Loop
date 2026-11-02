@@ -192,21 +192,30 @@ MODEL_PATH=/path/to/SenseNova-Loop-9B-Preview DATASET=/path/to/train.jsonl \
 
 请将 `/path/to/train.jsonl` 替换为你的 SFT 数据集路径。配置选项、DPO 和 MTP 训练方法请参见[训练指南](https://github.com/OpenSenseNova/torchtitan/tree/main/examples/train/SenseNova-Loop-9B-Preview)。
 
-### DSpark 训练
+### 推测解码训练
 
-在配置好的训练环境中，可使用以下命令在单机 8 卡上为 **SenseNova-Loop-9B-Preview** 训练 DSpark draft model：
+如需在单机 8 卡上为 **SenseNova-Loop-9B-Preview** 训练 DSpark 或 DFlash2 draft model，请使用 [SenseSpec 仓库](https://github.com/OpenSenseNova/SenseSpec)提供的训练脚本。
+
+首先，克隆仓库并进入项目目录：
 
 ```bash
 git clone https://github.com/OpenSenseNova/SenseSpec.git
 cd SenseSpec
+```
+
+#### DSpark 训练
+
+运行以下命令训练 DSpark draft model：
+
+```bash
 bash examples/SenseNova-Loop-9B-Preview-dspark/run.sh
 ```
 
-### DFlash2 训练
+#### DFlash2 训练
+
+运行以下命令训练 DFlash2 draft model：
 
 ```bash
-git clone https://github.com/OpenSenseNova/SenseSpec.git
-cd SenseSpec
 bash examples/SenseNova-Loop-9B-Preview-dflash2/run.sh
 ```
 
