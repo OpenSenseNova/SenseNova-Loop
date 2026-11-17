@@ -1,0 +1,2 @@
+{"id":"arithmetic","prompt":"What is 13 times 7? Reply with the number only.","max_new_tokens":16}
+{"id":"history","messages":[{"role":"user","content":"Remember this code: 7319."},{"role":"assistant","content":"I will remember the code."},{"role":"user","content":"What code did I give you? Reply with the code only."}],"max_new_tokens":16}
