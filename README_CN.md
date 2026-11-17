@@ -264,6 +264,16 @@ SenseNova-Loop 支持 MTP 推测解码。DSpark 和 DFlash2 的 draft model 训�
 
 推测解码 draft model 的 DSpark 和 DFlash2 训练脚本见 [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec)。
 
+## ⚠️ 已知局限
+
+受模型体量和迭代时间限制，SenseNova-Loop-9B 在以下方面仍有改进空间：
+
+- **复杂指令跟随**：面对较多、较复杂的工具定义或多重条件约束时，模型可能出现理解与执行偏差。
+- **代码与通用 Agent 能力**：模型在代码和通用 Agent 任务中的表现仍有稳定性不足的情况，可以通过更多步骤修正部分错误；处理复杂长程任务的能力仍需提升。
+- **复杂网页生成**：包含复杂 3D 场景和丰富动态元素的网页未必能单轮完成，部分案例需要结合用户反馈，经过 2–3 轮修复才能达到较好的效果。
+
+我们将持续改进模型，并计划在未来将 Loop 架构应用于更大规模的模型。欢迎社区分享使用反馈和问题案例。
+
 ## 📄 License 与引用
 
 模型项目采用 [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-Loop/blob/main/LICENSE)。

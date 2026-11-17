@@ -265,6 +265,16 @@ For model fine-tuning, refer to the SenseNova-Loop examples in [OpenSenseNova/to
 
 Training scripts for DSpark and DFlash2 speculative decoding draft models are available in [OpenSenseNova/SenseSpec](https://github.com/OpenSenseNova/SenseSpec).
 
+## ⚠️ Known Limitations
+
+Given its size and development time, SenseNova-Loop-9B has room for improvement in the following areas:
+
+- **Complex instruction following:** The model may misunderstand or miss requirements when given many complex tool definitions or multiple constraints.
+- **Coding and general agent tasks:** Performance can be inconsistent on coding and general agent tasks. The model can correct some errors through additional steps, but its ability to handle complex, long-horizon tasks still needs improvement.
+- **Complex web generation:** Websites with complex 3D scenes and rich animations may not be completed in a single turn. Some examples require user feedback and two to three rounds of refinement.
+
+We will continue to improve the model and plan to apply the Loop architecture to larger models in the future. We welcome community feedback and reports of issues.
+
 ## 📄 License and Citation
 
 The model project is licensed under the [Apache License 2.0](https://github.com/OpenSenseNova/SenseNova-Loop/blob/main/LICENSE).
