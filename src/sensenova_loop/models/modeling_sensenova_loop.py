@@ -396,7 +396,8 @@ def _configure_text_model(text, config):
 
 class SenseNovaLoopModel(hf.Qwen3_5Model):
     config_class = SenseNovaLoopConfig
-    _keep_in_fp32_modules = ["mhc_attn", "mhc_ffn"]
+    # The strict policy also applies to BF16 loads, before checkpoint conversion.
+    _keep_in_fp32_modules_strict = ["mhc_attn", "mhc_ffn", "A_log", "dt_bias"]
     _no_split_modules = ["Qwen3_5DecoderLayer", "MHCDecoderLayer", "Qwen3_5VisionBlock"]
     _keys_to_ignore_on_load_unexpected = [r"^mtp\."]
 
@@ -408,7 +409,7 @@ class SenseNovaLoopModel(hf.Qwen3_5Model):
 
 class SenseNovaLoopForConditionalGeneration(hf.Qwen3_5ForConditionalGeneration):
     config_class = SenseNovaLoopConfig
-    _keep_in_fp32_modules = ["mhc_attn", "mhc_ffn"]
+    _keep_in_fp32_modules_strict = ["mhc_attn", "mhc_ffn", "A_log", "dt_bias"]
     _no_split_modules = ["Qwen3_5DecoderLayer", "MHCDecoderLayer", "Qwen3_5VisionBlock"]
     _keys_to_ignore_on_load_unexpected = [r"^mtp\."]
 

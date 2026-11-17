@@ -53,9 +53,11 @@ def test_multiple_images(engine, tmp_path):
 def test_routing_precision_and_cache_slots(engine):
     from transformers import DynamicCache
 
-    routers = [param for name, param in engine.model.named_parameters()
-               if ".mhc_attn." in name or ".mhc_ffn." in name]
-    assert routers and all(param.dtype == torch.float32 for param in routers)
+    fp32_parameters = [param for name, param in engine.model.named_parameters()
+                       if ".mhc_attn." in name or ".mhc_ffn." in name
+                       or name.endswith((".A_log", ".dt_bias"))]
+    assert len(fp32_parameters) == 144
+    assert all(param.dtype == torch.float32 for param in fp32_parameters)
     inputs = engine.processor.apply_chat_template(
         build_messages("Hello"), add_generation_prompt=True, enable_thinking=False,
         tokenize=True, return_dict=True, return_tensors="pt",
@@ -70,11 +72,16 @@ def test_routing_precision_and_cache_slots(engine):
 
 
 def test_repository_model_matches_checkpoint_implementation(engine):
+    import json
+    from pathlib import Path
+
+    from safetensors import safe_open
     from transformers.dynamic_module_utils import get_class_from_dynamic_module
 
     path = os.environ["SENSENOVA_LOOP_MODEL"]
     reference_class = get_class_from_dynamic_module(
-        "modeling_sensenova_loop.SenseNovaLoopForConditionalGeneration", path, local_files_only=True,
+        "modeling_sensenova_loop.SenseNovaLoopForConditionalGeneration",
+        os.environ.get("SENSENOVA_LOOP_REFERENCE_SOURCE", path), local_files_only=True,
     )
     assert reference_class is not type(engine.model)
     assert reference_class.__module__.startswith("transformers_modules.")
@@ -83,12 +90,24 @@ def test_repository_model_matches_checkpoint_implementation(engine):
         local_files_only=True,
         dtype=torch.bfloat16, device_map={"": str(engine.device)}, attn_implementation="sdpa",
     ).eval()
+    # The independent implementation's default BF16 loader also rounds these tensors.
+    # Restore its reference values directly from the checkpoint, without using native metadata.
+    index = json.loads((Path(path) / "model.safetensors.index.json").read_text())["weight_map"]
+    for name, parameter in reference.named_parameters():
+        if ".mhc_attn." in name or ".mhc_ffn." in name or name.endswith((".A_log", ".dt_bias")):
+            with safe_open(str(Path(path) / index[name]), framework="pt", device="cpu") as source:
+                saved = source.get_tensor(name)
+            assert saved.dtype == torch.float32
+            parameter.data = saved.to(engine.device)
     inputs = engine.processor.apply_chat_template(
         build_messages("What is 13 times 7? Reply with the number only."),
         add_generation_prompt=True, enable_thinking=False, tokenize=True,
         return_dict=True, return_tensors="pt",
     ).to(engine.device)
     with torch.inference_mode():
+        actual_logits = engine.model(**inputs, use_cache=True, logits_to_keep=4).logits
+        expected_logits = reference(**inputs, use_cache=True, logits_to_keep=4).logits
+        torch.testing.assert_close(actual_logits, expected_logits, rtol=0, atol=0)
         actual = engine.model.generate(**inputs, max_new_tokens=8, do_sample=False,
                                        temperature=None, top_p=None, top_k=None)
         expected = reference.generate(**inputs, max_new_tokens=8, do_sample=False,

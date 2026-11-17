@@ -9,6 +9,7 @@ from sensenova_loop.models.modeling_sensenova_loop import (
     MHCRouter,
     SenseNovaLoopConfig,
     SenseNovaLoopForConditionalGeneration,
+    SenseNovaLoopModel,
     execution_plan,
     sinkhorn,
 )
@@ -42,6 +43,35 @@ def test_registered_model_roundtrip_without_checkpoint_code(tmp_path):
     assert type(loaded) is SenseNovaLoopForConditionalGeneration
     assert execution_plan(loaded.config.to_dict()) == tuple(range(4)) * 2
     assert len(loaded.model.language_model.layers) == 4
+
+
+@pytest.mark.parametrize("model_class", [SenseNovaLoopModel, SenseNovaLoopForConditionalGeneration])
+@pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float16])
+def test_low_precision_loading_preserves_exported_fp32_parameters(tmp_path, model_class, dtype):
+    config = tiny_config()
+    config.text_config.layer_types = ["linear_attention"] * 3 + ["full_attention"]
+    config.text_config.linear_num_key_heads = 2
+    config.text_config.linear_num_value_heads = 2
+    config.text_config.linear_key_head_dim = 16
+    config.text_config.linear_value_head_dim = 16
+    model = model_class(config)
+    originals = {}
+    with torch.no_grad():
+        for name, parameter in model.named_parameters():
+            if ".mhc_attn." in name or ".mhc_ffn." in name or name.endswith((".A_log", ".dt_bias")):
+                # Values deliberately lose bits if converted to either low precision dtype.
+                parameter.copy_(torch.linspace(0.1234567, 0.8765432, parameter.numel()).reshape_as(parameter))
+                originals[name] = parameter.detach().clone()
+                assert not torch.equal(parameter, parameter.to(dtype).float())
+    assert len(originals) == 22  # Four router tensors per layer, plus two per linear layer.
+    model.save_pretrained(tmp_path)
+    loaded = model_class.from_pretrained(tmp_path, dtype=dtype, local_files_only=True)
+    parameters = dict(loaded.named_parameters())
+    for name, expected in originals.items():
+        assert parameters[name].dtype == torch.float32, name
+        torch.testing.assert_close(parameters[name], expected, rtol=0, atol=0)
+    embedding = next(value for name, value in parameters.items() if name.endswith("embed_tokens.weight"))
+    assert embedding.dtype == dtype
 
 
 def test_cached_forward_matches_full_sequence_with_shared_layers():

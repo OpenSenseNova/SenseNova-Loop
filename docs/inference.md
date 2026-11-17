@@ -146,7 +146,7 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
   sets the GPU weight budget (default: 80% of currently free GPU memory). `low`
   keeps weights on CPU and uses Accelerate hooks to transfer weights for each
   module execution. Both offload modes need substantial host RAM and add transfer
-  time. They support shared Loop visits; mHC routing weights retain FP32.
+  time. They support shared Loop visits; mHC routing, `A_log` and `dt_bias` retain FP32.
   If the balanced budget places all weights on CPU, GPU execution hooks are
   installed just as in low mode. Transient execution allocations can exceed the
   persistent weight budget.
@@ -160,7 +160,12 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
   require more memory; this is not a maximum-memory guarantee. CPU offload is
   opt-in as described above; tensor parallelism is not provided by this entry point.
 - Keep `--dtype bfloat16` unless you need `float32`. The repository model implementation
-  preserves FP32 mHC routing parameters. Do not manually cast those parameters.
+  preserves mHC routing, `A_log` and `dt_bias` parameters in FP32 directly during
+  checkpoint loading. Do not manually cast those parameters or the loaded model
+  to a lower precision; upcasting rounded values cannot recover the checkpoint values.
+  “BF16 backbone” describes the default loading policy. Checkpoint storage can
+  differ: an FP32-stored backbone is rounded when loaded in BF16. Use
+  `--dtype float32` to retain an FP32-stored backbone's parameter values.
 - SDPA is the default attention backend; `--attn-backend eager` is also available.
   Optional `causal_conv1d` and `flash-linear-attention` kernels are not required
   for correctness. Transformers warns when using slower PyTorch fallbacks.
@@ -187,8 +192,16 @@ SENSENOVA_LOOP_MODEL=/path/to/SenseNova-Loop-9B-Preview \
   python -m pytest -q -m integration
 ```
 
+For an exported checkpoint without Python model files, set
+`SENSENOVA_LOOP_REFERENCE_SOURCE` to the original Preview checkpoint directory.
+The independent implementation comes from that directory; its configuration
+and weights still come from `SENSENOVA_LOOP_MODEL`. The comparison restores the
+reference's FP32 mHC, `A_log` and `dt_bias` directly from those weights and uses
+BF16 for both backbones. It verifies this mixed precision policy, including
+original values for the protected groups.
+
 These cover text answers, independent requests, conversation history, ordered
-multi-image understanding, FP32 routing parameters and 56 execution-cache slots.
+multi-image understanding, FP32 routing and linear attention parameters, and 56 execution-cache slots.
 They also compare the repository implementation with the original checkpoint
 implementation and exercise text/VQA in both CPU offload modes. CPU tests cover
 local Auto-class save/load, shared-layer cached/full-forward equivalence, mHC
