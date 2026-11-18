@@ -7,6 +7,7 @@
 <p align="center">
   <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-SenseNova--Loop--9B-yellow" alt="SenseNova-Loop-9B on Hugging Face"></a>
   <a href="https://huggingface.co/sensenova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-SenseNova--Loop--9B--Preview-yellow" alt="SenseNova-Loop-9B-Preview on Hugging Face"></a>
+  <a href="https://modelscope.cn/models/sensenova/SenseNova-Loop-9B"><img src="https://img.shields.io/badge/ModelScope-SenseNova--Loop--9B-624AFF?logo=modelscope&amp;logoColor=white" alt="SenseNova-Loop-9B on ModelScope"></a>
   <a href="https://modelscope.cn/models/SenseNova/SenseNova-Loop-9B-Preview"><img src="https://img.shields.io/badge/ModelScope-SenseNova--Loop--9B--Preview-624AFF?logo=modelscope&amp;logoColor=white" alt="SenseNova-Loop-9B-Preview on ModelScope"></a>
   <a href="https://github.com/OpenSenseNova/SenseNova-Loop"><img src="https://img.shields.io/badge/GitHub-SenseNova--Loop-181717?logo=github&amp;logoColor=white" alt="GitHub repository"></a>
   <a href="https://github.com/OpenSenseNova/SenseNova-Loop/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache 2.0 License"></a>
