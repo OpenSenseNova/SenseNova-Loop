@@ -69,9 +69,10 @@ CUDA_VISIBLE_DEVICES=0 python examples/vqa/inference.py \
 ## MTP 推测解码
 
 通过 `--mtp-tokens 3` 启用 Preview checkpoint 的 MTP 预测分支，每轮最多提出三个
-候选 token。默认 `--mtp-tokens 0` 使用普通自回归生成。完整 checkpoint 必须包含权重
-索引引用的 MTP 权重（Preview 发布版包括 `mtp.safetensors`）；缺失预测分支时会报错，
-不会使用未初始化的权重。
+候选 token。默认 `--mtp-tokens 0` 使用普通自回归生成。完整 checkpoint 必须包含索引分片
+中的 MTP 权重，或与主模型文件放在一起的独立 `mtp.safetensors`。即使索引未列出此独立
+文件，也会加载；已有的 checkpoint 预测分支优先。缺失预测分支时会报错，不会使用
+未初始化的权重。
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 sensenova-loop \

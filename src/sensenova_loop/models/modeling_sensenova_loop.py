@@ -16,6 +16,7 @@ from transformers.models.qwen3_5 import modeling_qwen3_5 as hf
 
 from ..compat import check_checkpoint_compatibility
 from .mtp import SenseNovaLoopMTP
+from .mtp_loading import include_mtp_companion
 
 
 _attention_capture = ContextVar("sensenova_attention_capture", default=None)
@@ -430,6 +431,14 @@ class SenseNovaLoopForConditionalGeneration(hf.Qwen3_5ForConditionalGeneration):
         missing.extend(item[0] if isinstance(item, tuple) else item for item in info["mismatched_keys"])
         model._mtp_missing_keys = [name for name in missing if name.startswith("mtp.")]
         return (model, info) if output_loading_info else model
+
+    @staticmethod
+    def _load_pretrained_model(model, state_dict, checkpoint_files, load_config, expected_keys=None):
+        if model.mtp is not None and state_dict is None:
+            checkpoint_files, load_config = include_mtp_companion(checkpoint_files, load_config)
+        return hf.Qwen3_5ForConditionalGeneration._load_pretrained_model(
+            model, state_dict, checkpoint_files, load_config, expected_keys,
+        )
 
     def generate_mtp(self, **kwargs):
         """Generate with the checkpoint MTP head; see the local inference guide."""

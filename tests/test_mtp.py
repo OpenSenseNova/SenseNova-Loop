@@ -128,6 +128,8 @@ def test_mtp_weights_roundtrip_and_missing_head_is_not_used(tmp_path):
         torch.testing.assert_close(loaded.mtp.state_dict()[name], parameter, rtol=0, atol=0)
     path = tmp_path / "model.safetensors"
     tensors = load_file(path)
+    save_file({name: value for name, value in tensors.items() if name.startswith("mtp.")},
+               tmp_path / "mtp.safetensors")
     del tensors["mtp.fc.weight"]
     save_file(tensors, path, metadata={"format": "pt"})
     missing = SenseNovaLoopForConditionalGeneration.from_pretrained(tmp_path, local_files_only=True)

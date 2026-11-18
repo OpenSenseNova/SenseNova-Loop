@@ -76,8 +76,10 @@ Run `sensenova-loop --help` for all options. U1-style aliases such as `--model_p
 Use `--mtp-tokens 3` to enable the Preview checkpoint's MTP predictor and propose
 up to three tokens per verification round. The default, `--mtp-tokens 0`, keeps
 ordinary autoregressive generation. The complete checkpoint must include the
-MTP weights referenced by its weight index (including `mtp.safetensors` in the
-Preview release); a missing predictor is reported rather than used uninitialized.
+MTP weights, either in the indexed shards or a separate `mtp.safetensors` next
+to the backbone files. The separate file is also loaded when the index omits it;
+an existing checkpoint predictor takes precedence. A missing predictor is
+reported rather than used uninitialized.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 sensenova-loop \
