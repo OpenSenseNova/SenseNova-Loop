@@ -5,6 +5,11 @@
 组织方式参考 [SenseNova-U1](https://github.com/OpenSenseNova/SenseNova-U1)；
 Loop 接收文本和图像，输出文本。
 
+本指南的示例及真实模型测试面向 `SenseNova-Loop-9B-Preview`。
+正式版 `SenseNova-Loop-9B` 的 Transformers 加载与服务部署见
+[README 入门说明](../README_CN.md#get-started)；本地包与正式版 checkpoint 的兼容性
+尚未验证。
+
 ## 安装
 
 使用 Python 3.10 或更新版本，并创建独立环境。先安装与 CUDA 环境匹配的
@@ -19,14 +24,15 @@ source .venv/bin/activate
 python -m pip install -e '.[dev]'
 ```
 
-下载权重，或直接使用已有的本地模型目录：
+下载 Preview 权重，或直接使用已有的本地模型目录：
 
 ```bash
 hf download sensenova/SenseNova-Loop-9B-Preview \
   --local-dir models/SenseNova-Loop-9B-Preview
 ```
 
-模型目录需要完整保留配置、分词器、聊天模板、处理器配置、权重索引和全部八个权重分片。
+模型目录需要完整保留配置、分词器、聊天模板、处理器配置、权重索引，以及该索引引用的
+全部权重分片。
 Loop/mHC 实现在 [`src/sensenova_loop/models`](../src/sensenova_loop/models/) 中维护。
 加载器注册本地模型类并使用 `trust_remote_code=False`；正常推理无需 checkpoint 中的
 Python 文件。本仓库不包含权重。
@@ -139,7 +145,7 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
   fast 驻留算法。
 - `low` 模式下 Transformers 可能提示模型位于 `meta`、输入位于 CUDA。
   Accelerate hooks 会在执行时装载卸载权重；输入应保留在选定 CUDA 设备上，请勿移到 `meta`。
-- 在 H200 上，BF16、SDPA 的短文本推理峰值已分配显存约为 17.7 GiB。
+- Preview 在 H200 上使用 BF16、SDPA 进行短文本推理时，峰值已分配显存约为 17.7 GiB。
   更长的输入、更大的图像和更高的生成预算需要更多显存，该数值不代表显存上限。
   CPU 卸载需按上文显式启用；此入口不提供张量并行。
 - 默认使用 `--dtype bfloat16`，也可选择 `float32`。仓库模型实现会在加载 checkpoint 时直接
@@ -163,7 +169,7 @@ CPU 单元测试不会下载权重：
 python -m pytest -q -m 'not integration'
 ```
 
-在空闲 GPU 上显式启用真实模型测试：
+可在空闲 GPU 上显式启用面向 Preview 的真实模型测试：
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 \
@@ -179,5 +185,6 @@ SENSENOVA_LOOP_MODEL=/path/to/SenseNova-Loop-9B-Preview \
 测试覆盖文本回答、独立请求、多轮历史、多图顺序理解、FP32 路由和线性注意力参数、
 56 个执行缓存槽；还会比较本地实现与原 checkpoint 实现，并验证两种 CPU 卸载模式的
 文本和视觉问答。CPU 测试覆盖本地 Auto 类保存/加载、共享层缓存与完整前向的一致性、
-mHC 精度、版本兼容检查、请求验证和 JSONL/输出行为。这些是短输入正确性测试，
-不代表长上下文或服务性能测试。对应范围见 [U1 对齐记录](u1_alignment.md)。
+mHC 精度、版本兼容检查、请求验证和 JSONL/输出行为。Preview 集成测试使用短输入，
+不代表正式版 checkpoint 验证、长上下文质量或服务性能测试。
+对应范围见 [U1 对齐记录](u1_alignment.md)。

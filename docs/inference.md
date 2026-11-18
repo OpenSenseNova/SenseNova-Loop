@@ -6,6 +6,12 @@ and runnable [text](../examples/text/inference.py) and
 [SenseNova-U1](https://github.com/OpenSenseNova/SenseNova-U1); Loop accepts text
 and images and produces text.
 
+The examples and real-checkpoint tests in this guide target
+`SenseNova-Loop-9B-Preview`. For the `SenseNova-Loop-9B` release, follow the
+[README's Transformers and deployment instructions](../README.md#get-started).
+Compatibility of the release checkpoint with this local package has not yet
+been verified.
+
 ## Install
 
 Use Python 3.10 or newer in a separate environment. Install a CUDA-compatible
@@ -20,15 +26,16 @@ source .venv/bin/activate
 python -m pip install -e '.[dev]'
 ```
 
-Download a checkpoint or use an existing local directory:
+Download the Preview checkpoint or use an existing local directory:
 
 ```bash
 hf download sensenova/SenseNova-Loop-9B-Preview \
   --local-dir models/SenseNova-Loop-9B-Preview
 ```
 
-Keep the config, tokenizer, chat template, processor config, weight index and all
-eight weight shards together. The Loop/mHC model implementation is maintained in
+Keep the config, tokenizer, chat template, processor config, weight index and
+every weight shard referenced by that index together. The Loop/mHC model
+implementation is maintained in
 [`src/sensenova_loop/models`](../src/sensenova_loop/models/). The loader registers
 these classes and uses `trust_remote_code=False`; no checkpoint Python file is
 needed for normal inference. Model weights are not included in this repository.
@@ -155,8 +162,9 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
 - In `low` mode Transformers can warn that the model is on `meta` while inputs
   are on CUDA. Accelerate hooks materialize offloaded weights during execution;
   keep inputs on the selected CUDA device rather than moving them to `meta`.
-- Short text inference used about 17.7 GiB of peak allocated CUDA memory on an
-  H200 with BF16 and SDPA. Longer prompts, larger images and generation budgets
+- With SenseNova-Loop-9B-Preview, short text inference used about 17.7 GiB of peak
+  allocated CUDA memory on an H200 with BF16 and SDPA. Longer prompts, larger
+  images and generation budgets
   require more memory; this is not a maximum-memory guarantee. CPU offload is
   opt-in as described above; tensor parallelism is not provided by this entry point.
 - Keep `--dtype bfloat16` unless you need `float32`. The repository model implementation
@@ -184,7 +192,7 @@ CPU unit tests do not download weights:
 python -m pytest -q -m 'not integration'
 ```
 
-Opt in to the real checkpoint tests on an available GPU:
+Opt in to the Preview real-checkpoint tests on an available GPU:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 \
@@ -206,5 +214,6 @@ They also compare the repository implementation with the original checkpoint
 implementation and exercise text/VQA in both CPU offload modes. CPU tests cover
 local Auto-class save/load, shared-layer cached/full-forward equivalence, mHC
 precision, compatibility gates, request validation and JSONL/output behavior.
-These are short correctness checks, not long-context or serving benchmarks.
+The Preview integration checks use short inputs; they do not validate the
+release checkpoint, long-context quality or serving performance.
 See the [U1 alignment record](u1_alignment.md) for the corresponding scope.
