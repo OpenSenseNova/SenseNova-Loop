@@ -93,3 +93,18 @@ def test_structured_result_counts_and_cpu_profiling(engine):
     assert (result.input_tokens, result.output_tokens) == (3, 2)
     assert result.metrics["elapsed_seconds"] > 0
     assert "peak_allocated_gib" not in result.metrics
+
+
+def test_mtp_option_reaches_model_and_returns_acceptance_metrics(engine):
+    def generate_mtp(**kwargs):
+        assert kwargs["mtp_tokens"] == 3 and kwargs["max_new_tokens"] == 2
+        assert not torch.is_grad_enabled()
+        return SimpleNamespace(sequences=torch.tensor([[11, 12, 13, 91, 99]]),
+                               metrics={"draft_tokens": 1, "accepted_tokens": 1})
+
+    engine.model.generate_mtp = generate_mtp
+    result = engine.generate_result([{"role": "user", "content": "Hello"}],
+                                    max_new_tokens=2, mtp_tokens=3)
+    assert result.text == "91,99" and result.output_tokens == 2
+    assert result.metrics["mtp"] == {"draft_tokens": 1, "accepted_tokens": 1}
+    assert not hasattr(engine.model, "options")

@@ -23,6 +23,8 @@ def parse_args(argv=None):
     parser.add_argument("--vram-mode", "--vram_mode", choices=["full", "balanced", "low"], default="full")
     parser.add_argument("--max-memory-gib", type=float, help="GPU weight budget for balanced mode")
     parser.add_argument("--max-new-tokens", "--max_new_tokens", type=int, default=256)
+    parser.add_argument("--mtp-tokens", "--mtp_tokens", type=int, default=0,
+                        help="MTP draft tokens per verification round; 0 disables MTP")
     parser.add_argument("--think", action="store_true", help="Include the model's thinking in the output")
     parser.add_argument("--do-sample", "--do_sample", action="store_true", help="Enable sampling; default is greedy")
     parser.add_argument("--temperature", type=float, default=0.7)
@@ -38,7 +40,8 @@ def parse_args(argv=None):
     args = parser.parse_args(argv)
     args.generation = dict(max_new_tokens=args.max_new_tokens, enable_thinking=args.think,
                            do_sample=args.do_sample, temperature=args.temperature, top_p=args.top_p,
-                           top_k=args.top_k, repetition_penalty=args.repetition_penalty)
+                           top_k=args.top_k, repetition_penalty=args.repetition_penalty,
+                           mtp_tokens=args.mtp_tokens)
     try:
         validate_generation_options(**{k: v for k, v in args.generation.items() if k != "enable_thinking"})
         if args.output is not None and args.output_dir is not None:

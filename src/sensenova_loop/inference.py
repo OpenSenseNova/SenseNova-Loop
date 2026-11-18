@@ -6,6 +6,7 @@ import torch
 from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from . import register
+from .generation import generate_tokens
 from .loading import load_model
 from .profiling import InferenceProfiler
 from .request import build_messages, validate_generation_options, validate_messages
@@ -74,11 +75,13 @@ class LoopInference:
         top_p: float = 0.9,
         top_k: int | None = None,
         repetition_penalty: float = 1.0,
+        mtp_tokens: int = 0,
         profile: bool = False,
     ) -> GenerationResult:
         """Return only newly generated text; thinking text is retained if enabled."""
         validate_messages(messages)
-        validate_generation_options(max_new_tokens, do_sample, temperature, top_p, top_k, repetition_penalty)
+        validate_generation_options(max_new_tokens, do_sample, temperature, top_p, top_k,
+                                    repetition_penalty, mtp_tokens)
 
         with InferenceProfiler(self.device, profile) as profiler:
             inputs = self.processor.apply_chat_template(
@@ -97,18 +100,15 @@ class LoopInference:
                     f"exceeds the model context length ({context_length})"
                 )
 
-            outputs = self.model.generate(
-                **inputs,
-                max_new_tokens=max_new_tokens,
-                do_sample=do_sample,
-                # Clear checkpoint sampling defaults for greedy decoding.
-                temperature=temperature if do_sample else None,
-                top_p=top_p if do_sample else None,
-                top_k=top_k if do_sample else None,
-                repetition_penalty=repetition_penalty,
-                use_cache=True,
-            )
+            options = dict(max_new_tokens=max_new_tokens, do_sample=do_sample,
+                           temperature=temperature if do_sample else None,
+                           top_p=top_p if do_sample else None,
+                           top_k=top_k if do_sample else None,
+                           repetition_penalty=repetition_penalty)
+            generated = generate_tokens(self.model, inputs, mtp_tokens=mtp_tokens, **options)
+            outputs = generated.sequences
             text = self.processor.decode(outputs[0, prompt_length:], skip_special_tokens=True)
+        profiler.metrics.update(generated.metrics)
         if profile:
             profiler.metrics["output_tokens_per_second"] = (
                 (outputs.shape[1] - prompt_length) / profiler.metrics["elapsed_seconds"]

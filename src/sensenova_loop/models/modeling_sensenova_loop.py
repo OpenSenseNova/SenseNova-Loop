@@ -15,6 +15,8 @@ from transformers.cache_utils import CacheLayerMixin, DynamicCache, LinearAttent
 from transformers.models.qwen3_5 import modeling_qwen3_5 as hf
 
 from ..compat import check_checkpoint_compatibility
+from .mtp import SenseNovaLoopMTP
+from .mtp_loading import include_mtp_companion
 
 
 _attention_capture = ContextVar("sensenova_attention_capture", default=None)
@@ -410,10 +412,46 @@ class SenseNovaLoopModel(hf.Qwen3_5Model):
 class SenseNovaLoopForConditionalGeneration(hf.Qwen3_5ForConditionalGeneration):
     config_class = SenseNovaLoopConfig
     _keep_in_fp32_modules_strict = ["mhc_attn", "mhc_ffn", "A_log", "dt_bias"]
-    _no_split_modules = ["Qwen3_5DecoderLayer", "MHCDecoderLayer", "Qwen3_5VisionBlock"]
-    _keys_to_ignore_on_load_unexpected = [r"^mtp\."]
+    _no_split_modules = ["Qwen3_5DecoderLayer", "MHCDecoderLayer", "Qwen3_5VisionBlock", "SenseNovaLoopMTP"]
 
     def __init__(self, config):
         execution_plan(config.to_dict())
         super().__init__(config)
         _configure_text_model(self.model.language_model, config)
+        count = getattr(config.text_config, "mtp_num_hidden_layers", 0)
+        self._mtp_configuration_error = SenseNovaLoopMTP.configuration_error(config.text_config) if count else None
+        self.mtp = SenseNovaLoopMTP(config.text_config) if count and not self._mtp_configuration_error else None
+        self.post_init()
+
+    @classmethod
+    def from_pretrained(cls, *args, **kwargs):
+        output_loading_info = kwargs.pop("output_loading_info", False)
+        model, info = super().from_pretrained(*args, output_loading_info=True, **kwargs)
+        missing = list(info["missing_keys"])
+        missing.extend(item[0] if isinstance(item, tuple) else item for item in info["mismatched_keys"])
+        model._mtp_missing_keys = [name for name in missing if name.startswith("mtp.")]
+        return (model, info) if output_loading_info else model
+
+    @staticmethod
+    def _load_pretrained_model(model, state_dict, checkpoint_files, load_config, expected_keys=None):
+        if model.mtp is not None and state_dict is None:
+            checkpoint_files, load_config = include_mtp_companion(checkpoint_files, load_config)
+        return hf.Qwen3_5ForConditionalGeneration._load_pretrained_model(
+            model, state_dict, checkpoint_files, load_config, expected_keys,
+        )
+
+    def generate_mtp(self, **kwargs):
+        """Generate with the checkpoint MTP head; see the local inference guide."""
+        from ..mtp import generate_mtp
+
+        options = {key: kwargs.pop(key) for key in list(kwargs) if key in (
+            "max_new_tokens", "mtp_tokens", "do_sample", "temperature", "top_p", "top_k",
+            "repetition_penalty",
+        )}
+        model_inputs = {"input_ids", "attention_mask", "position_ids", "inputs_embeds",
+                        "pixel_values", "image_grid_thw", "mm_token_type_ids", "mm_encoder_outputs",
+                        "past_key_values"}
+        unknown = kwargs.keys() - model_inputs
+        if unknown:
+            raise ValueError("Unsupported MTP arguments: " + ", ".join(sorted(unknown)))
+        return generate_mtp(self, kwargs, **options)
