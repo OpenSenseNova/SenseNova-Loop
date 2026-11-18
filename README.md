@@ -21,6 +21,8 @@
 
 ## 📣 News
 
+**🔥 2026-11-18:** Added download links for the [AWQ](https://huggingface.co/sensenova/SenseNova-Loop-9B-AWQ) and [GGUF](https://huggingface.co/sensenova/SenseNova-Loop-9B-GGUF) weights.
+
 **🔥 2026-11-17:** We release SenseNova-Loop-9B, with model weights and code available to the community.
 
 **🔥 2026-10-31:** We release SenseNova-Loop-9B-Preview, with model weights and code available to the community.
@@ -142,9 +144,19 @@ The shared looped architecture uses approximately 9B distinct parameters. With 4
 
 ## Get Started
 
+### Model Weights
+
+| Weights | Download | Files |
+| --- | --- | --- |
+| BF16 | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B) · [ModelScope](https://modelscope.cn/models/sensenova/SenseNova-Loop-9B) | Release weights in Safetensors format |
+| AWQ | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B-AWQ) | 4-bit AWQ weights and matching MTP draft |
+| GGUF | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B-GGUF) | BF16, Q8_0, Q5_K_M, and Q4_K_M |
+
+### Text Generation with Transformers
+
 Use Transformers to load the model from a Hugging Face repository or a local model directory. The examples below cover single-GPU text generation and serving with inference engines.
 
-### Requirements
+#### Requirements
 
 The checked Preview environment uses Transformers 5.18.0, PyTorch 2.11.0, and CUDA 13.0. The model directory must include the configuration, tokenizer, chat template, custom model code, and all weight shards.
 
@@ -153,8 +165,6 @@ First install a CUDA-compatible build of [PyTorch](https://pytorch.org/get-start
 ```bash
 python -m pip install "transformers==5.18.0" accelerate safetensors
 ```
-
-### Text Generation with Transformers
 
 Set model_id to the release model directory or repository ID, then run:
 

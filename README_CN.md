@@ -21,6 +21,8 @@
 
 ## 📣 News
 
+**🔥 2026-11-18：** 新增 [AWQ](https://huggingface.co/sensenova/SenseNova-Loop-9B-AWQ) 和 [GGUF](https://huggingface.co/sensenova/SenseNova-Loop-9B-GGUF) 权重下载入口。
+
 **🔥 2026-11-17：** 我们正式发布 SenseNova-Loop-9B，开放模型权重与相关代码，欢迎社区下载、部署和探索。
 
 **🔥 2026-10-31：** 我们推出 SenseNova-Loop-9B-Preview，开放模型权重与相关代码。
@@ -141,9 +143,19 @@ Looped Transformer 展现出良好的性能扩展潜力，为模型能力提升�
 
 ## Get Started
 
+### 模型权重
+
+| 权重 | 下载 | 文件说明 |
+| --- | --- | --- |
+| BF16 | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B) · [ModelScope](https://modelscope.cn/models/sensenova/SenseNova-Loop-9B) | 正式版 Safetensors 权重 |
+| AWQ | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B-AWQ) | 4-bit AWQ 权重与配套 MTP |
+| GGUF | [Hugging Face](https://huggingface.co/sensenova/SenseNova-Loop-9B-GGUF) | BF16、Q8_0、Q5_K_M、Q4_K_M |
+
+### 使用 Transformers 生成文本
+
 使用 Transformers 从 Hugging Face 仓库或本地模型目录加载模型。下方示例展示单张 GPU 上的文本生成，以及使用推理引擎启动服务的方法。
 
-### 环境要求
+#### 环境要求
 
 Preview 已验证的环境使用 Transformers 5.18.0、PyTorch 2.11.0 和 CUDA 13.0。模型目录需要包含配置、分词器、对话模板、自定义模型代码和全部权重分片。
 
@@ -152,8 +164,6 @@ Preview 已验证的环境使用 Transformers 5.18.0、PyTorch 2.11.0 和 CUDA 1
 ```bash
 python -m pip install "transformers==5.18.0" accelerate safetensors
 ```
-
-### 使用 Transformers 生成文本
 
 将 model_id 替换为正式版权重目录或模型仓库 ID，然后运行：
 
