@@ -44,10 +44,12 @@ def validate_messages(messages):
 
 
 def validate_generation_options(max_new_tokens, do_sample, temperature, top_p,
-                                top_k=None, repetition_penalty=1.0):
+                                top_k=None, repetition_penalty=1.0, mtp_tokens=0):
     """Validate the common generation contract for the CLI and Python API."""
     if type(max_new_tokens) is not int or max_new_tokens < 1:
         raise ValueError("max_new_tokens must be a positive integer")
+    if type(mtp_tokens) is not int or mtp_tokens < 0:
+        raise ValueError("mtp_tokens must be a nonnegative integer")
     if do_sample and (
         not math.isfinite(temperature) or temperature <= 0
         or not math.isfinite(top_p) or not 0 < top_p <= 1

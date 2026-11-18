@@ -71,6 +71,44 @@ printed to stdout. Add `--top-k 20 --repetition-penalty 1.05` to tune decoding.
 Run `sensenova-loop --help` for all options. U1-style aliases such as `--model_path`,
 `--question`, `--max_new_tokens`, `--top_p`, `--top_k` and `--vram_mode` are accepted.
 
+## MTP speculative decoding
+
+Use `--mtp-tokens 3` to enable the Preview checkpoint's MTP predictor and propose
+up to three tokens per verification round. The default, `--mtp-tokens 0`, keeps
+ordinary autoregressive generation. The complete checkpoint must include the
+MTP weights referenced by its weight index (including `mtp.safetensors` in the
+Preview release); a missing predictor is reported rather than used uninitialized.
+
+```bash
+CUDA_VISIBLE_DEVICES=0 sensenova-loop \
+  --model-path models/SenseNova-Loop-9B-Preview --local-files-only \
+  --prompt 'What is 13 times 7? Reply with the number only.' \
+  --mtp-tokens 3 --max-new-tokens 128 --output-format json
+```
+
+For Python, pass `mtp_tokens=3` to `engine.generate` or
+`engine.generate_result`. JSONL records accept the same `mtp_tokens` field.
+Direct model callers can use `model.generate_mtp(**inputs, mtp_tokens=3)`;
+the returned object contains `.sequences` and `.metrics`. Its generation options
+are the ones exposed by the engine; other generation arguments are rejected.
+
+The target model verifies every proposal. Greedy decoding accepts its matching
+tokens; sampling uses probability-ratio acceptance and residual correction to
+preserve the target sampling distribution. Additional random draws mean that a
+fixed seed need not produce the same sampled text as ordinary generation.
+Thinking, temperature, top-p/top-k and repetition penalty remain configurable.
+
+This entry point supports one unpadded text/image conversation with a fresh
+cache and one MTP prediction layer with shared embeddings and output weights.
+Beam search, stop strings, classifier-free guidance, watermarking, token healing
+and time-based stopping are not supported. Unsupported MTP configurations do
+not prevent ordinary generation. Supported predictor weights are loaded with
+the model even when `mtp_tokens=0`.
+Structured results include `metrics.mtp` with proposal/acceptance counts,
+verification rounds, target calls and replay calls. Rejected candidates require
+cache restoration and replay; MTP adds predictor weights and cache memory, and
+does not guarantee a speedup for every request.
+
 ## JSONL batches and structured output
 
 ```bash
@@ -87,7 +125,7 @@ CUDA_VISIBLE_DEVICES=0 sensenova-loop \
 Batch mode loads the model once and processes requests sequentially. Each record
 is an object with `prompt` (or VQA `question`) and optional `image`/`images`, `id`,
 `system_prompt`, `seed`, `max_new_tokens`, `think`, `do_sample`, `temperature`,
-`top_p`, `top_k`, and `repetition_penalty`. Image paths resolve relative to the
+`top_p`, `top_k`, `repetition_penalty` and `mtp_tokens`. Image paths resolve relative to the
 JSONL file. Alternatively use `messages` for text conversation history, without
 `image`/`images`. A record's `system_prompt` overrides the CLI default. A supplied
 system instruction replaces a leading system turn in `messages`, or is prepended
@@ -125,8 +163,8 @@ Load once and call `generate` repeatedly. The caller maintains the message
 history; each call processes that history with a fresh cache. For images use
 `build_messages(question, images=["first.png", "second.png"])` or pass
 Transformers image/text content blocks directly. The API accepts one
-conversation per call. Tool execution, video input, serving and speculative
-decoding are outside this inference entry point; see the root README for
+conversation per call. MTP options are described above. Tool execution, video
+input and serving are outside this inference entry point; see the root README for
 external training and serving integrations.
 
 `engine.generate_result(messages, profile=True)` returns a `GenerationResult`
@@ -162,7 +200,8 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
 - In `low` mode Transformers can warn that the model is on `meta` while inputs
   are on CUDA. Accelerate hooks materialize offloaded weights during execution;
   keep inputs on the selected CUDA device rather than moving them to `meta`.
-- With SenseNova-Loop-9B-Preview, short text inference used about 17.7 GiB of peak
+- With SenseNova-Loop-9B-Preview, a short text MTP request with three proposal
+  tokens per round and a 24-token output budget used about 18.3 GiB of peak
   allocated CUDA memory on an H200 with BF16 and SDPA. Longer prompts, larger
   images and generation budgets
   require more memory; this is not a maximum-memory guarantee. CPU offload is

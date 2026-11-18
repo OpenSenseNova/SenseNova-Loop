@@ -45,6 +45,8 @@ fast 驻留实现；模式名称描述内存放置选择，不代表相同的延
 
 U1 image synthesis/editing/interleaving, its LoRA/GGUF formats and its training
 model implementation are not transferred to this text-output Loop checkpoint.
+Loop's native MTP predictor and speculative decoder are implemented for its own
+checkpoint; they are separate from U1's training-side MTP modules.
 Loop's official external training and serving integrations remain documented in
 the root README. Short correctness tests do not establish 256K-context quality,
 throughput or concurrent-serving performance.
@@ -52,3 +54,6 @@ throughput or concurrent-serving performance.
 U1 的图像生成、编辑、交错输出、其 LoRA/GGUF 格式及训练模型实现未迁入这个文本输出的
 Loop checkpoint。Loop 官方的外部训练与部署集成仍在根 README 说明。短输入正确性测试
 不能证明 256K 上下文质量、吞吐或并发服务性能。
+
+Loop 的原生 MTP 预测分支及推测解码使用其自身 checkpoint，
+与 U1 训练端的 MTP 模块分开实现。

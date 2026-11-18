@@ -66,6 +66,37 @@ CUDA_VISIBLE_DEVICES=0 python examples/vqa/inference.py \
 全部选项可通过 `sensenova-loop --help` 查看。兼容 U1 风格别名，例如 `--model_path`、
 `--question`、`--max_new_tokens`、`--top_p`、`--top_k` 和 `--vram_mode`。
 
+## MTP 推测解码
+
+通过 `--mtp-tokens 3` 启用 Preview checkpoint 的 MTP 预测分支，每轮最多提出三个
+候选 token。默认 `--mtp-tokens 0` 使用普通自回归生成。完整 checkpoint 必须包含权重
+索引引用的 MTP 权重（Preview 发布版包括 `mtp.safetensors`）；缺失预测分支时会报错，
+不会使用未初始化的权重。
+
+```bash
+CUDA_VISIBLE_DEVICES=0 sensenova-loop \
+  --model-path models/SenseNova-Loop-9B-Preview --local-files-only \
+  --prompt '13 乘以 7 等于多少？只回答数字。' \
+  --mtp-tokens 3 --max-new-tokens 128 --output-format json
+```
+
+Python 调用可向 `engine.generate` 或 `engine.generate_result` 传入 `mtp_tokens=3`；
+JSONL 记录也支持 `mtp_tokens` 字段。直接使用模型时可调用
+`model.generate_mtp(**inputs, mtp_tokens=3)`，返回对象包含 `.sequences` 和 `.metrics`。
+其生成选项与 engine 暴露的选项一致，其他生成参数会被拒绝。
+
+所有候选都由主模型验证。贪心解码接受与主模型一致的 token；采样使用概率比接受和残差
+校正，保留主模型的采样分布。额外的随机数消耗意味着相同 seed 下的采样文本不保证与
+普通生成逐字一致。思考模式、temperature、top-p/top-k 和重复惩罚仍可配置。
+
+此入口支持单段未填充的文本/图像对话，每次调用使用新的缓存；MTP 配置需为一个预测层，
+共享主模型的词嵌入和输出权重。不支持 beam search、stop strings、classifier-free
+guidance、水印、token healing 或按时间停止。不支持的 MTP 配置不会阻止普通生成；
+支持的预测分支权重会随模型加载，即使 `mtp_tokens=0`。结构化结果的 `metrics.mtp`
+包含候选数、接受数、验证轮数、主模型调用数和
+回放调用数。拒绝候选需要恢复缓存并回放；MTP 也会增加预测分支和缓存的显存开销，
+不保证每个请求都能加速。
+
 ## JSONL 批处理与结构化输出
 
 ```bash
@@ -82,7 +113,7 @@ CUDA_VISIBLE_DEVICES=0 sensenova-loop \
 批处理只加载一次模型，按记录顺序逐条推理。每行为一个对象，使用 `prompt` 或视觉问答
 的 `question`，可选字段为 `image`/`images`、`id`、`system_prompt`、`seed`、
 `max_new_tokens`、`think`、`do_sample`、`temperature`、`top_p`、`top_k`、
-`repetition_penalty`。图像路径相对于 JSONL 文件解析。也可用 `messages` 输入纯文本
+`repetition_penalty`、`mtp_tokens`。图像路径相对于 JSONL 文件解析。也可用 `messages` 输入纯文本
 多轮历史，此时不能同时使用 `image`/`images`。记录中的 `system_prompt` 优先于 CLI 默认值；
 提供的系统指令会替换 `messages` 开头的系统消息，若没有则插入一条。未提供覆盖值时，
 保留历史中已有的系统消息。忽略空行；非法记录会在加载模型前报告行号。
@@ -115,7 +146,7 @@ print(engine.generate(messages, max_new_tokens=64))
 重新处理传入历史并创建新的缓存。图像可通过
 `build_messages(question, images=["first.png", "second.png"])` 输入，或直接传入
 Transformers 的图像、文本内容块。API 每次接收一段对话。
-工具执行、视频输入、服务部署和推测解码不在此推理入口的支持范围内；
+MTP 选项见上文。工具执行、视频输入和服务部署不在此推理入口的支持范围内；
 外部训练与部署集成见根目录 README。
 
 `engine.generate_result(messages, profile=True)` 返回 `GenerationResult`，包含 `.text`、
@@ -145,7 +176,8 @@ config = AutoConfig.from_pretrained("models/SenseNova-Loop-9B-Preview",
   fast 驻留算法。
 - `low` 模式下 Transformers 可能提示模型位于 `meta`、输入位于 CUDA。
   Accelerate hooks 会在执行时装载卸载权重；输入应保留在选定 CUDA 设备上，请勿移到 `meta`。
-- Preview 在 H200 上使用 BF16、SDPA 进行短文本推理时，峰值已分配显存约为 17.7 GiB。
+- Preview 在 H200 上使用 BF16、SDPA 进行短文本 MTP 推理（每轮最多三个候选、
+  输出预算 24 token）时，峰值已分配显存约为 18.3 GiB。
   更长的输入、更大的图像和更高的生成预算需要更多显存，该数值不代表显存上限。
   CPU 卸载需按上文显式启用；此入口不提供张量并行。
 - 默认使用 `--dtype bfloat16`，也可选择 `float32`。仓库模型实现会在加载 checkpoint 时直接
