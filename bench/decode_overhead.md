@@ -47,23 +47,47 @@ fusion ceiling.
 
 ## Reported results
 
-Reference hardware: RTX 5060 Laptop GPU (8 GB), Windows, Preview weights at
-4-bit, PyTorch 2.14.1+cu132 with Transformers 5.18.0 (the reference
-measurement environment), 2048-token context, greedy decoding, median over
+Hardware: RTX 5060 Laptop GPU (8 GB), Windows, Preview weights at 4-bit
+(bitsandbytes, double quantization, BF16 compute), PyTorch 2.14.1+cu132
+with Transformers 5.18.0, 2048-token context, greedy decoding, median over
 32 decode steps.
+
+The primary numbers are the benchmark's own paired arms: one process, one
+fresh boot, arms run back to back, so they share every condition and hold
+their ratios. Every arm matches the reference outputs exactly (teacher
+forced max logit delta 0, 32 of 32 greedy tokens).
 
 | Arm | Median ms/token | Throughput |
 | --- | ---: | ---: |
-| reference (aten::logsumexp) | 1539.0 | 0.65 tok/s |
-| torch.compile(reference), dynamic=False | 158.5 | 3.77 tok/s over the full 32-token window |
+| reference (aten::logsumexp) | 502.3 | 1.07 tok/s |
+| shipped pair reduction | 422.1 | 2.33 tok/s |
+| compiled ceiling, dynamic=False | 159.5 | 6.3 tok/s |
+
+Headline for the shipped arm: all 3,840 two-element logsumexp composites
+per decode token are removed, the outputs are bit-identical, and wall clock
+improves 1.19x on the clean boot (502.3 to 422.1 ms/token). The compiled
+ceiling is 3.15x on the same paired run (502.3 to 159.5 ms/token). The
+removed cost is launch overhead, so the multiple grows with machine load
+rather than shrinking.
+
+A mid-session observation of the same arms, taken after hours of prior GPU
+work in the same Windows (WDDM) session, recorded a reference median of
+1539.0 ms/token (0.65 tok/s) against a compiled median of 158.5 ms. That
+is a condition-sensitive worst case of the same mechanism, not the
+comparison baseline: the reference absolute median moves with machine load
+while the paired arms hold their ratios, and the fused compiled arm barely
+moves at all (158.5 mid-session versus 159.5 fresh boot). The profiler
+attribution below was captured in that loaded state.
 
 The throughput column is total wall time over the 32-token window divided
-by 32, so it includes the arm's slow early steps; the median column is the
-per-step median and is the number to compare.
+by 32, so it includes each arm's slow early steps; the median column is the
+per-step median and is the number to compare. A run writes
+`decode_overhead_result.json` with the per-arm values.
 
 Profiler attribution over 3 decode steps of the reference arm:
 
-- about 7,680 `aten::logsumexp` calls per decode token
+- about 7,680 `aten::logsumexp` profiler entries, that is 3,840 calls, per
+  decode token
 - their child reduce kernels sum to roughly 1.1 s of the 1.43 s GPU-busy
   time per token
 - about 43,397 kernel launches per token
@@ -80,12 +104,6 @@ CPU dispatch profile of one full sinkhorn call at the decode shape
 The shipped arm removes every reduce dispatch and cuts the aten op count
 per call by about a third; CPU wall time per call moves little because
 Python dispatch dominates at this size on CPU.
-
-TODO(measurement): shipped-arm GPU decode median pending a free GPU on the
-measurement machine. Run
-`PYTHONPATH=src python bench/bench_decode.py --model-path <Preview dir>`
-and record the shipped arm's median here and in the two upstream drafts;
-until then the compile ceiling above bounds the available win.
 
 ## Why the closed form was rejected
 
