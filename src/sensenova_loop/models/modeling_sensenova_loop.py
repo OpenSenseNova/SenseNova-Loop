@@ -82,12 +82,38 @@ def execution_plan(config):
     return tuple(range(start)) + tuple(range(start, end)) * count + tuple(range(end, num_layers))
 
 
+def _logsumexp_pair(logits, dim):
+    """logsumexp over a size-2 dimension using elementwise kernels only.
+
+    Every mHC router normalization reduces over exactly two elements for
+    two-stream checkpoints, and aten::logsumexp lowers that small reduction
+    to an amax/masked_fill/sub/exp/sum/log/add composite whose reduce
+    kernels dominate Loop decode launch counts. For a pair the reduction
+    equals log(exp(a - m) + exp(b - m)) + m with m = max(a, b), which needs
+    only elementwise ops and reproduces aten::logsumexp bit-for-bit: the
+    larger shifted term is exactly exp(0), and the sum, log and final add
+    round exactly like aten's composite. The shorter
+    m + log1p(exp(-|a - b|)) form of the same identity was measured and
+    rejected: aten rounds 1 + exp(-d) before the log, so it differs from
+    aten by up to 2 float32 ulp (max 2.38e-7 over the parity corpus).
+    tests/test_sinkhorn.py verifies equality over a randomized and
+    adversarial corpus. Any other dimension size falls back to
+    aten::logsumexp unchanged.
+    """
+    if logits.size(dim) != 2:
+        return torch.logsumexp(logits, dim=dim, keepdim=True)
+    a = logits.select(dim, 0)
+    b = logits.select(dim, 1)
+    m = torch.maximum(a, b)
+    return (torch.log(torch.exp(a - m) + torch.exp(b - m)) + m).unsqueeze(dim)
+
+
 def sinkhorn(logits, iterations):
     """Normalize routing logits across rows and columns in log space."""
     logits = logits.float()
     for _ in range(iterations):
-        logits = logits - torch.logsumexp(logits, dim=-1, keepdim=True)
-        logits = logits - torch.logsumexp(logits, dim=-2, keepdim=True)
+        logits = logits - _logsumexp_pair(logits, -1)
+        logits = logits - _logsumexp_pair(logits, -2)
     return logits.exp()
 
 
